@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Palette, Circle, Pen, Brush, RotateCcw, Download, Home, Grid, Square, Eraser, Droplet, Redo2, Undo2, LineChart } from 'lucide-react';
+import { Circle, Pen, Brush, RotateCcw, Download, Home, Grid, Square, Eraser, Droplet, Redo2, Undo2, LineChart } from 'lucide-react';
 
 type ArtMode = 'home' | 'zentangle' | 'mandala' | 'stencil' | 'plain';
 type BrushType = 'round' | 'square' | 'spray' | 'eraser';
