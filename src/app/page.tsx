@@ -27,70 +27,6 @@ const ArtCreationPlatform: React.FC = () => {
   const [lastPoint, setLastPoint] = useState<Point | null>(null);
   const [startShape, setStartShape] = useState<Point | null>(null);
 
-  useEffect(() => {
-    if (canvasRef.current && currentMode !== 'home') {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        canvas.width = window.innerWidth < 700 ? window.innerWidth - 32 : 800;
-        canvas.height = window.innerWidth < 700 ? 400 : 600;
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        if (currentMode === 'mandala') {
-          drawMandalaGuides(ctx);
-        } else if (currentMode === 'zentangle') {
-          drawZentangleGrid(ctx);
-        } else if (currentMode === 'stencil') {
-          drawStencilTemplate(ctx);
-        }
-      }
-    }
-  }, [currentMode, drawMandalaGuides, drawZentangleGrid, drawStencilTemplate]);
-
-  const saveHistory = () => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      setHistory((h) => [...h.slice(-20), canvas.toDataURL()]);
-      setRedoStack([]);
-    }
-  };
-
-  const undo = () => {
-    if (history.length === 0) return;
-    const canvas = canvasRef.current;
-    if (canvas) {
-      setRedoStack((r) => [canvas.toDataURL(), ...r]);
-      const img = new window.Image();
-      img.src = history[history.length - 1];
-      img.onload = () => {
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0);
-        }
-      };
-      setHistory((h) => h.slice(0, -1));
-    }
-  };
-
-  const redo = () => {
-    if (redoStack.length === 0) return;
-    const canvas = canvasRef.current;
-    if (canvas) {
-      setHistory((h) => [...h, canvas.toDataURL()]);
-      const img = new window.Image();
-      img.src = redoStack[0];
-      img.onload = () => {
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0);
-        }
-      };
-      setRedoStack((r) => r.slice(1));
-    }
-  };
-
   const drawMandalaGuides = (ctx: CanvasRenderingContext2D) => {
     const centerX = ctx.canvas.width / 2;
     const centerY = ctx.canvas.height / 2;
@@ -273,6 +209,70 @@ const ArtCreationPlatform: React.FC = () => {
     }
     saveHistory();
   };
+
+  const saveHistory = () => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      setHistory((h) => [...h.slice(-20), canvas.toDataURL()]);
+      setRedoStack([]);
+    }
+  };
+
+  const undo = () => {
+    if (history.length === 0) return;
+    const canvas = canvasRef.current;
+    if (canvas) {
+      setRedoStack((r) => [canvas.toDataURL(), ...r]);
+      const img = new window.Image();
+      img.src = history[history.length - 1];
+      img.onload = () => {
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+        }
+      };
+      setHistory((h) => h.slice(0, -1));
+    }
+  };
+
+  const redo = () => {
+    if (redoStack.length === 0) return;
+    const canvas = canvasRef.current;
+    if (canvas) {
+      setHistory((h) => [...h, canvas.toDataURL()]);
+      const img = new window.Image();
+      img.src = redoStack[0];
+      img.onload = () => {
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+        }
+      };
+      setRedoStack((r) => r.slice(1));
+    }
+  };
+
+  useEffect(() => {
+    if (canvasRef.current && currentMode !== 'home') {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        canvas.width = window.innerWidth < 700 ? window.innerWidth - 32 : 800;
+        canvas.height = window.innerWidth < 700 ? 400 : 600;
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (currentMode === 'mandala') {
+          drawMandalaGuides(ctx);
+        } else if (currentMode === 'zentangle') {
+          drawZentangleGrid(ctx);
+        } else if (currentMode === 'stencil') {
+          drawStencilTemplate(ctx);
+        }
+      }
+    }
+  }, [currentMode, drawMandalaGuides, drawZentangleGrid, drawStencilTemplate]);
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;
