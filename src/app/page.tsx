@@ -45,7 +45,7 @@ const ArtCreationPlatform: React.FC = () => {
         }
       }
     }
-  }, [currentMode]);
+  }, [currentMode, drawMandalaGuides, drawZentangleGrid, drawStencilTemplate]);
 
   const saveHistory = () => {
     const canvas = canvasRef.current;
